@@ -1,4 +1,6 @@
+#!/bin/sh
 #!/system/bin/sh
+# Swap the above two lines as appropriate: Linux: /bin/sh; Android: /system/bin/sh
 #http://android.stackexchange.com/questions/143304
 
 #This variable is used to calculate the time took by the various operations
@@ -27,10 +29,10 @@ function apkChecker {
 function dependenciesChecker {
  echo "[INFO] Checking if both the aapt and zip utilities are installed..."
 
- whence -v aapt &> /dev/null
+ which aapt &> /dev/null
  isAaptAbsent="$(echo $?)"
 
- whence -v zip &> /dev/null
+ which zip &> /dev/null
  isZipAbsent="$(echo $?)"
 
  case "$isAaptAbsent" in
