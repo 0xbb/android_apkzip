@@ -28,7 +28,10 @@ post][1] for more information. In summary, for *Arch Linux*:
 
 This assumes that the _multilib_ repository must be enabled in `/etc/pacman.conf`. It installs 32-bit versions of `aapt`, `adb` and `fastboot`.
 
+Alternatively, there is the AUR package [android-sdk-platform-tools][2].
+
 [1]: http://android.stackexchange.com/a/156520
+[2]: https://aur.archlinux.org/packages/android-sdk-platform-tools
 
 Flashing the ZIP requires a custom recovery or root access and a tool
 like *FlashFire*.
@@ -49,9 +52,9 @@ Most notable in this respect is *FlashFire*.
 
 ### History
 
-This work follows a [learning exercise][2] to understand the structure of
-a flashable ZIP and builds upon the ideas presented in [this example][3]
+This work follows a [learning exercise][3] to understand the structure of
+a flashable ZIP and builds upon the ideas presented in [this example][4]
 which is where the original script name, `edgar.sh` comes from.
 
-[2]: http://android.stackexchange.com/questions/156336
-[3]: http://android.stackexchange.com/questions/143304
+[3]: http://android.stackexchange.com/questions/156336
+[4]: http://android.stackexchange.com/questions/143304
