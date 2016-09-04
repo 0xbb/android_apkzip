@@ -20,7 +20,13 @@ on Linux (root is not required on Linux). In both cases, the `zip` and
 
 The `aapt` is part of the *Android Development Toolkit* (ADT). It can,
 however, be obtained without the overhead of the full ADT. See [this
-post][1] for more information.
+post][1] for more information. In summary, for *Arch Linux*:
+
+    $ sudo pacman -S lib32-{glibc,gcc-libs,zlib}
+    $ curl -J -O https://android.izzysoft.de/downloads.php?file=adb-binaries-linux-1.0.32.tar.gz
+    $ tar xf adb-binaries-linux-1.0.32.tar.gz
+
+This assumes that the _multilib_ repository must be enabled in `/etc/pacman.conf`. It installs 32-bit versions of `aapt`, `adb` and `fastboot`.
 
 [1]: http://android.stackexchange.com/a/156520
 
