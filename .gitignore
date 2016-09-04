@@ -1,0 +1,5 @@
+# Generic files to ignore
+*.un~
+*.swp
+*.adb
+*.zip
