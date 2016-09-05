@@ -50,6 +50,12 @@ The output of the script is a file `edgar.zip` in the same directory.
 Some applications don't perform properly when not installed on `/data`.
 Most notable in this respect is *FlashFire*.
 
+### Extras
+
+The following extra utilities are included:
+
+* `get_apk` can be used to download `.apk` files from `/data/app`.
+
 ### History
 
 This work follows a [learning exercise][3] to understand the structure of

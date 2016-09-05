@@ -1,0 +1,31 @@
+#!/bin/bash
+# QAD script to pull APK files from Android device.
+# JL 20160610
+
+src=/data/app
+serial=$(adb shell getprop ro.serialno | tr -d '\r')
+
+#dest=/home/john/files/media/android/$serial/$src
+#mkdir -p "$dest"
+dest=root@sodium:/srv/public/pkg/apk/
+
+# root access is required to list the /data/app area but it is not required
+# to copy an apk if its full path is known.
+
+# apk is /data/app/something.apk on 4.3 Jelly Bean
+# apk is /data/app/something/base.apk on 5.x Lollipop
+# local copy is always something.apk
+
+for apk in $(adb shell su -c ls $src | tr -d '\r')
+do
+  echo "Copying $apk"
+  if [[ ${apk: -4} == '.apk' ]]
+  then
+    adb pull $src/$apk /tmp
+  else
+    adb pull $src/$apk/base.apk /tmp/$apk.apk
+    apk="$apk.apk"
+  fi
+  rsync /tmp/$apk $dest
+  rm /tmp/$apk
+done
