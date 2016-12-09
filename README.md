@@ -43,7 +43,44 @@ script:
 
     $ edgar.sh
 
+If the `aadb` tool is installed to the local directory start it with an
+augmented path:
+
+    $ PATH=".:$PATH" ./edgar.sh
+
 The output of the script is a file `edgar.zip` in the same directory.
+
+#### Worked Example
+
+First create a new, empty working directory and enter it:
+
+    $ mkdir edgar_workingcopy && cd edgar_workingcopy
+
+Obtain the `edgar.sh` script
+
+    $ curl -J -O 'http://git/?p=android_apkzip.git;a=blob_plain;f=edgar.sh;hb=HEAD'
+    $ chmod +x edgar.sh
+
+Obtain prerequisites
+
+    $ curl -J https://android.izzysoft.de/downloads.php?file=adb-binaries-linux-1.0.32.tar.gz | tar xzf -
+
+Verify the directory contents:
+
+    $ ls
+    aapt  adb  fastboot  lib
+
+Copy the desired `.apk` files into the working directory alongside `aapt`.
+
+Then run the script:
+
+    $ PATH=".:$PATH" ./edgar.sh
+
+Upload the produced `edgar.zip` to an Android device:
+
+    $ adb push edgar.zip /storage/sdcard0/Download
+
+Apply it using `FlashFire` or another ZIP-flashing method.
 
 ### Issues
 
