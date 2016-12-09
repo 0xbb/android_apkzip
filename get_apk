@@ -1,0 +1,10 @@
+#!/bin/bash
+
+src=root@sodium:/srv/public/pkg/apk
+
+while read apk
+do
+  [[ "${apk:0:1}" =~ ^\#*$ ]] && continue # ignore comments and blank lines
+  echo -e "-----------------------\nGetting $src/$apk ..."
+  rsync -av "$(printf '%q' "$src/$apk")" .
+done
