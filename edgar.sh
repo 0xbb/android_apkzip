@@ -18,6 +18,11 @@ ZIPFILE="$scriptDir/edgar.zip"
 # the ZIP structure will be built
 ZIPDIR="$ZIPFILE.dir"
 
+# This defines the name of an optional file containing custom commands
+# If present, the contents of this file is appended to the install
+# script before it unmounts the system partition
+CUSTOMFILE="$scriptDir/custom.sh"
+
 rm -rf "$ZIPDIR" "$ZIPFILE" # Uncomment to automatically remove pre-existing ZIP
 
 #This defines the path to the update-binary within the ZIPDIR
@@ -310,6 +315,16 @@ EOF
 }
 #///End of function "sectionWriter_validateApp"///
 
+#This function writes any custom commands to update-binary
+#///Beginning of function "sectionWriter_customCommands"///
+function sectionWriter_customCommands {
+ if [ -f "$CUSTOMFILE" ]; then
+   echo "[INFO] Writing custom commands to update-binary..."
+   cat "$CUSTOMFILE" >> "$UPDATE_BINARY"
+ fi
+}
+#///End of function "sectionWriter_systemUnmount"///
+
 #This function writes the instructions to unmount the system partition, to update-binary
 #///Beginning of function "sectionWriter_systemUnmount"///
 function sectionWriter_systemUnmount {
@@ -382,6 +397,7 @@ do
   sectionWriter_validateApp
 done
 
+sectionWriter_customCommands
 sectionWriter_systemUnmount
 sectionWriter_goodbyeString
 echo ""
