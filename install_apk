@@ -1,0 +1,16 @@
+#!/bin/bash
+# Install apk onto connected device using adb
+
+src=root@sodium:/srv/public/pkg/apk
+cache="$HOME/files/media/android"
+
+[[ -d "$cache" ]] || { echo "No $cache"; exit 1; }
+
+while read apk
+do
+  [[ "${apk:0:1}" =~ ^\#*$ ]] && continue # ignore comments and blank lines
+  echo -e "-----------------------\nGetting $src/$apk ..."
+  rsync -av "$(printf '%q' "$src/$apk")" "$cache"
+  echo    "Installing $apk ..."
+  adb install "$cache/$apk"
+done

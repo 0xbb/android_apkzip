@@ -92,6 +92,8 @@ Most notable in this respect is *FlashFire*.
 The following extra utilities are included:
 
 * `pull_apk` can be used to download `.apk` files from `/data/app` (requires `adb`).
+* `install_apk` can be used to install `.apk` files into `/data/app`. The given
+  pacakges are downloaed from a remote file server into a local cache (requires `adb`).
 
 ### History
 
