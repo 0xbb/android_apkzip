@@ -91,7 +91,7 @@ Most notable in this respect is *FlashFire*.
 
 The following extra utilities are included:
 
-* `get_apk` can be used to download `.apk` files from `/data/app`.
+* `pull_apk` can be used to download `.apk` files from `/data/app` (requires `adb`).
 
 ### History
 
