@@ -6,11 +6,14 @@ cache="$HOME/files/media/android"
 
 [[ -d "$cache" ]] || { echo "No $cache"; exit 1; }
 
+sed -e 's:#.*$::g' -e '/\s*#.*$/d' -e '/^\s*$/d' | (
+
 while read apk
 do
-  [[ "${apk:0:1}" =~ ^\#*$ ]] && continue # ignore comments and blank lines
   echo -e "-----------------------\nGetting $src/$apk ..."
   rsync -av "$(printf '%q' "$src/$apk")" "$cache"
   echo    "Installing $apk ..."
   adb install "$cache/$apk"
 done
+
+)
