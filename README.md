@@ -12,6 +12,8 @@ The rationale for this is two-fold:
 * to consume free space on the `/system` partition rather than `/data` so
   that end-user space isn't wasted.
 
+The MIT License applies to this work; please refer to the LICENSE file.
+
 ### Prerequisites
 
 The ZIP can be prepared either on a rooted Android device or by any user
