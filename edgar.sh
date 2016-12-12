@@ -18,11 +18,6 @@ ZIPFILE="$scriptDir/edgar.zip"
 # the ZIP structure will be built
 ZIPDIR="$ZIPFILE.dir"
 
-# This defines the name of an optional file containing custom commands
-# If present, the contents of this file is appended to the install
-# script before it unmounts the system partition
-CUSTOMFILE="$scriptDir/custom.sh"
-
 rm -rf "$ZIPDIR" "$ZIPFILE" # Uncomment to automatically remove pre-existing ZIP
 
 #This defines the path to the update-binary within the ZIPDIR
@@ -37,6 +32,25 @@ depend() {
   do
     which "${dep}" &> /dev/null || \
       abort 'Missing dependency '${dep}' (required: '$@')'
+  done
+}
+
+# Install apps' apks
+# Parameter is directory containing apk files, either 'app' or 'priv-app'
+# Android versions supporting priv-app will install to relevant /system/app
+# or /system/priv-app as appropriate. Other versions that do not support
+# priv-app will install all apps into /system/app.
+function appInstaller {
+  appDir="$1"
+  [[ "$appDir" =~ ^(priv-)?app$ ]] || abort "Invalid app class '$appDir'"
+  for appName in $( find "$1" -maxdepth 1 -type f -name '*.apk' )
+  do
+    appNameRetriever "$appName"
+    sectionWriter_appName
+    add_apk
+    sectionWriter_apkInstaller
+    sectionWriter_libInstaller
+    sectionWriter_validateApp
   done
 }
 
@@ -221,10 +235,10 @@ case "\$androidVersion" in
   unzip -qo "\$ZIP" '$appName/$appName.apk' -d '/system/app/'
   ;;
  4.4*|4.4.*)
-  unzip -qo "\$ZIP" '$appName/$appName.apk' -d '/system/priv-app/'
+  unzip -qo "\$ZIP" '$appName/$appName.apk' -d '/system/$appDir/'
   ;;
  5*|5.*|5.*.*|6*|6.*|6.*.*)
-  unzip -qo "\$ZIP" '$appName/*' -d '/system/priv-app'
+  unzip -qo "\$ZIP" '$appName/*' -d '/system/$appDir'
   ;;
 esac
 
@@ -248,7 +262,7 @@ case "\$androidVersion" in
   apkFile='/system/app/$appName/$appName.apk'
   ;;
  5*|5.*|5.*.*|6*|6.*|6.*.*)
-  apkFile='/system/priv-app/$appName/$appName.apk'
+  apkFile='/system/$appDir/$appName/$appName.apk'
   ;;
 esac
 
@@ -289,23 +303,23 @@ case "\$androidVersion" in
   ;;
  4.4*)
   ui_print "~ Setting ownership and permissions..."
-  chown 0.0 "/system/priv-app/$appName.apk"
-  chmod 644 "/system/priv-app/$appName.apk"
+  chown 0.0 "/system/$appDir/$appName.apk"
+  chmod 644 "/system/$appDir/$appName.apk"
   if [ -e "/system/bin/setenforce" ]; then
    ui_print "~ Setting SELinux appropriate context..."
-   chcon u:object_r:system_file:s0 "/system/priv-app/$appName.apk"
+   chcon u:object_r:system_file:s0 "/system/$appDir/$appName.apk"
   fi
   ;;
  5*|6*)
   ui_print "~ Setting ownership and permissions..."
-  chown 0.0 "/system/priv-app/$appName"
-  chmod 755 "/system/priv-app/$appName"
-  chown 0.0 "/system/priv-app/$appName/$appName.apk"
-  chmod 644 "/system/priv-app/$appName/$appName.apk"
+  chown 0.0 "/system/$appDir/$appName"
+  chmod 755 "/system/$appDir/$appName"
+  chown 0.0 "/system/$appDir/$appName/$appName.apk"
+  chmod 644 "/system/$appDir/$appName/$appName.apk"
   if [ -e "/system/bin/setenforce" ]; then
    ui_print "~ Setting SELinux appropriate context..."
-   chcon u:object_r:system_file:s0 "/system/priv-app/$appName"
-   chcon u:object_r:system_file:s0 "/system/priv-app/$appName/$appName.apk"
+   chcon u:object_r:system_file:s0 "/system/$appDir/$appName"
+   chcon u:object_r:system_file:s0 "/system/$appDir/$appName/$appName.apk"
   fi
   ;;
 esac
@@ -318,9 +332,9 @@ EOF
 #This function writes any custom commands to update-binary
 #///Beginning of function "sectionWriter_customCommands"///
 function sectionWriter_customCommands {
- if [ -f "$CUSTOMFILE" ]; then
-   echo "[INFO] Writing custom commands to update-binary..."
-   cat "$CUSTOMFILE" >> "$UPDATE_BINARY"
+ if [ -f "$scriptDir/$1" ]; then
+   echo "[INFO] Writing $1 to update-binary..."
+   cat "$scriptDir/$1" >> "$UPDATE_BINARY"
  fi
 }
 #///End of function "sectionWriter_systemUnmount"///
@@ -386,18 +400,12 @@ sectionWriter_header
 sectionWriter_systemRwMount
 sectionWriter_osVersionChecker
 sectionWriter_getAbiList
+sectionWriter_customCommands custom_preinstall.sh
 
-for appName in $( find "$scriptDir" -maxdepth 1 -type f -name '*.apk' )
-do
-  appNameRetriever "$appName"
-  sectionWriter_appName
-  add_apk
-  sectionWriter_apkInstaller
-  sectionWriter_libInstaller
-  sectionWriter_validateApp
-done
+appInstaller app
+appInstaller priv-app
 
-sectionWriter_customCommands
+sectionWriter_customCommands custom_postinstall.sh
 sectionWriter_systemUnmount
 sectionWriter_goodbyeString
 echo ""
