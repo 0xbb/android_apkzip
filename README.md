@@ -38,13 +38,20 @@ like *FlashFire*.
 
 ### Usage
 
-Place the `.apk` files in a directory and, from that directory, run the
-script:
+Create a working directory and place the `.apk` files in subdirectories
+as follows:
+
+* apks placed into an `app` subdirectory will install into `/system/app`
+* apks placed into a `priv-app` subdirectory will be installed into
+  `/system/priv-app` on Android versions 4.4 and above (`app` will be
+  used on earlier versions)
+
+Then, from the working directory, run the script:
 
     $ edgar.sh
 
-If the `aadb` tool is installed to the local directory start it with an
-augmented path:
+If the `aadb` tool is installed to the same working directory then start it
+with an augmented path:
 
     $ PATH=".:$PATH" ./edgar.sh
 
@@ -52,9 +59,9 @@ The output of the script is a file `edgar.zip` in the same directory.
 
 #### Worked Example
 
-First create a new, empty working directory and enter it:
+First create a new, empty working directory structure and enter it:
 
-    $ mkdir edgar_workingcopy && cd edgar_workingcopy
+    $ mkdir -p edgar_workingcopy/{,priv-}app && cd edgar_workingcopy
 
 Obtain the `edgar.sh` script
 
@@ -68,11 +75,10 @@ Obtain prerequisites
 Verify the directory contents:
 
     $ ls
-    aapt  adb  fastboot  lib
+    aapt  adb  app fastboot  lib priv-app
 
-Copy the desired `.apk` files into the working directory alongside `aapt`.
-
-Then run the script:
+Copy the desired `.apk` files into the `app` and/or `priv-app` subdirectories
+as appropriate. Then run the script:
 
     $ PATH=".:$PATH" ./edgar.sh
 
@@ -81,6 +87,14 @@ Upload the produced `edgar.zip` to an Android device:
     $ adb push edgar.zip /storage/sdcard0/Download
 
 Apply it using `FlashFire` or another ZIP-flashing method.
+
+### Custom scripts
+
+Custom scripts can be provided as `custom_preinstall.sh` and `custom_postinstall.sh`
+which are applied before and after the apk installation. An example script is given
+as `examples/custom_preinstall.sh` which deletes some stock applications before 
+alternatives are installed. The optional custom scripts, if required, should be
+supplied in the root of the working directory.
 
 ### Issues
 
@@ -92,10 +106,20 @@ Most notable in this respect is *FlashFire*.
 The following extra utilities are included:
 
 * `get_apk` downloads `.apk` files from remote file server into current directory,
-  expected to be the working directory from where `edgar.sh` will be run.
+  expected to be the relevant `app` or `priv-app` subdirectory of the working
+  directory where `edgar.sh` will be run.
 * `pull_apk` downloads `.apk` files from `/data/app` (requires `adb`).
 * `install_apk` installs `.apk` files into `/data/app`. The given pacakges are
   downloaed from a remote file server into a local cache (requires `adb`).
+
+The `get_apk` can be used to populate the `app` or `priv-app` directories. Given
+a file, `apk_list`, containing the apk names in the relevant `app` directory:
+
+    (cd app; ../get_apk < apk_list)
+
+An example is provided in `examples/apk_list`. Empty lines, whitespace and
+comments (any text beginning with `#` through to the end of the line) are
+ignored.
 
 ### History
 

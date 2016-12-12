@@ -1,0 +1,27 @@
+# Sample package list for inclusion in Edgar ZIP
+
+com.android2.calculator3-1.apk                  # Calculator
+com.fsck.k9.apk                                 # Email client
+org.sufficientlysecure.keychain-1.apk           # OpenKeychain (GnuPG)
+com.google.zxing.client.android-1.apk           # Barcode scanner
+org.geometerplus.fbreader.plugin.pdf.apk        # E-Reader
+org.geometerplus.zlibrary.ui.android.apk        # (required for above)
+org.connectbot-2.apk                            # SSH client
+net.openvpn.openvpn.apk                         # VPN client
+com.owncloud.android-1.apk                      # Owncloud
+com.hp.printercontrol-2.apk                     # HP printer services
+
+org.fdroid.fdroid-1.apk                         # F-Droid app store
+
+com.xda.labs-1.apk                              # XDA Labs
+com.stackexchange.marvin-1.apk                  # Stack Exchange
+
+org.torproject.android-1.apk                    # Tor         (Orbot)
+info.guardianproject.orfox-1.apk                # Tor Browser (Orfox)
+
+bbc.iplayer.android-2.apk                       # BBC iPlayer
+air.uk.co.bbc.android.mediaplayer-2.apk         # (required for above)
+bbc.mobile.weather-2.apk                        # BBC Weather
+bbc.mobile.news.uk.apk                          # BBC News
+
+com.farproc.wifi.analyzer.apk                   # Wifi analyzer tool
