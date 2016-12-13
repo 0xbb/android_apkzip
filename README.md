@@ -25,7 +25,7 @@ however, be obtained without the overhead of the full ADT. See [this
 post][1] for more information. In summary, for *Arch Linux*:
 
     $ sudo pacman -S lib32-{glibc,gcc-libs,zlib}
-    $ curl -J -O https://android.izzysoft.de/downloads.php?file=adb-binaries-linux-1.0.32.tar.gz
+    $ curl -J -O 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/adb-binaries-linux-1.0.32.tar.gz'
     $ tar xf adb-binaries-linux-1.0.32.tar.gz
 
 This assumes that the _multilib_ repository must be enabled in `/etc/pacman.conf`. It installs 32-bit versions of `aapt`, `adb` and `fastboot`.
