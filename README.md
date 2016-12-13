@@ -91,7 +91,7 @@ Obtain the `edgar.sh` script
 
 Obtain prerequisites
 
-    $ curl -J https://android.izzysoft.de/downloads.php?file=adb-binaries-linux-1.0.32.tar.gz | tar xzf -
+    $ curl -J 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/adb-binaries-linux-1.0.32.tar.gz | tar xzf -
 
 Verify the directory contents:
 
@@ -150,3 +150,7 @@ which is where the original script name, `edgar.sh` comes from.
 
 [3]: http://android.stackexchange.com/questions/156336
 [4]: http://android.stackexchange.com/questions/143304
+
+The original source of the adb binaries package is:
+
+    https://android.izzysoft.de/downloads.php?file=adb-binaries-linux-1.0.32.tar.gz
