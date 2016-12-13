@@ -42,7 +42,7 @@ depend() {
 # priv-app will install all apps into /system/app.
 function appInstaller {
   appDir="$1"
-  [[ "$appDir" =~ ^(priv-)?app$ ]] || abort "Invalid app class '$appDir'"
+  [ "$appDir" == 'priv-app' -o "$appDir" == 'app' ] || abort "Invalid app class '$appDir'"
   for appName in $( find "$1" -maxdepth 1 -type f -name '*.apk' )
   do
     appNameRetriever "$appName"

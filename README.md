@@ -40,6 +40,21 @@ like *FlashFire*.
 
 ### Usage
 
+The script can be used on either Linux or Android. However, if using Android,
+consider the following points:
+
+* Ensure the filesystem is not mounted `noexec` (e.g. use `/data/local/tmp`).
+* Should `curl`, used in the following examples, terminate with a *SSL
+  certificate verification* error, try adding a `-k` option.
+* The location of the `sh` shell differs between Linux and Android. The script
+  contains two *shebang* lines - the first for Linux and the second for Android.
+  On Android, remove the Linux shebang so that the Android one will be used.
+  One way to do this is `sed -i -n -e '2,$p' edgar.sh`.
+* The shell tries to write temporary files to `/data/local` which requires
+  root privileges. For this reason only the script must be run as `root`. This
+  is discussed at http://android.stackexchange.com/questions/156719. A remedy
+  would be welcome!
+
 Create a working directory and place the `.apk` files in subdirectories
 as follows:
 
@@ -50,12 +65,16 @@ as follows:
 
 Then, from the working directory, run the script:
 
-    $ edgar.sh
+    $ ./edgar.sh
 
 If the `aadb` tool is installed to the same working directory then start it
 with an augmented path:
 
     $ PATH=".:$PATH" ./edgar.sh
+
+To run with `root` privileges (e.g. on Android):
+
+    $ su -c ./edgar.sh
 
 The output of the script is a file `edgar.zip` in the same directory.
 
@@ -68,9 +87,7 @@ First create a new, empty working directory structure and enter it:
 Obtain the `edgar.sh` script
 
     $ curl -J -O 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/edgar.sh'
-    $ chmod +x edgar.sh
-
-(should `curl` terminate with a *SSL certificate verification* error, try adding a `-k` option - e.g. on Android.)
+    $ chmod 700 edgar.sh
 
 Obtain prerequisites
 
@@ -79,7 +96,7 @@ Obtain prerequisites
 Verify the directory contents:
 
     $ ls
-    aapt  adb  app fastboot  lib priv-app
+    aapt  adb  app edgar.sh fastboot  lib priv-app
 
 Copy the desired `.apk` files into the `app` and/or `priv-app` subdirectories
 as appropriate. Then run the script:
