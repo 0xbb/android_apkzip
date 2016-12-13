@@ -91,7 +91,7 @@ Obtain the `edgar.sh` script
 
 Obtain prerequisites
 
-    $ curl -J 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/adb-binaries-linux-1.0.32.tar.gz | tar xzf -
+    $ curl -J 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/adb-binaries-linux-1.0.32.tar.gz' | tar xzf -
 
 Verify the directory contents:
 
