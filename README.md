@@ -67,8 +67,10 @@ First create a new, empty working directory structure and enter it:
 
 Obtain the `edgar.sh` script
 
-    $ curl -J -O 'http://git/?p=android_apkzip.git;a=blob_plain;f=edgar.sh;hb=HEAD'
+    $ curl -J -O 'https://raw.githubusercontent.com/johnlane/android_apkzip/master/edgar.sh'
     $ chmod +x edgar.sh
+
+(should `curl` terminate with a *SSL certificate verification* error, try adding a `-k` option - e.g. on Android.)
 
 Obtain prerequisites
 
