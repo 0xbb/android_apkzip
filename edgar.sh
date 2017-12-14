@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #!/system/bin/sh
-# Swap the above two lines as appropriate: Linux: /bin/sh; Android: /system/bin/sh
+# Swap the above two lines as appropriate: Linux: /bin/bash; Android: /system/bin/sh
 #http://android.stackexchange.com/questions/143304
 
 #This variable is used to calculate the time took by the various operations
@@ -164,18 +164,9 @@ ui_print "~ Checking Android version..."
 androidVersion="\$(get_buildprop 'ro.build.version.release')"
 
 case "\$androidVersion" in
- 4.1*|4.1.*|4.2*|4.2.*|4.3*|4.3.*)
-  ui_print "~ Android Jelly Bean (\$androidVersion) detected: proceeding."
-  ;;
- 4.4*|4.4.*)
-  ui_print "~ Android KitKat (\$androidVersion) detected: proceeding."
-  ;;
- 5*|5.*|5.*.*)
-  ui_print "~ Android Lollipop (\$androidVersion) detected: proceeding."
-  ;;
- 6*|6.*|6.*.*)
-  ui_print "~ Android Marshmallow (\$androidVersion) detected: proceeding."
-  ;;
+ 7*|7.*|7.*.*)
+   ui_print "~ Android Nougat (\$androidVersion) detected: proceeding."
+   ;;
  *)
   ui_print "~ Your Android version (\$androidVersion) is either obsolete or still unsupported."
   ui_print "~ Unmounting /system and aborting."
@@ -231,13 +222,7 @@ function sectionWriter_apkInstaller {
 ui_print "~ Installing $displayedName..."
 
 case "\$androidVersion" in
- 4.1*|4.1.*|4.2*|4.2.*|4.3*|4.3.*)
-  unzip -qo "\$ZIP" '$appName/$appName.apk' -d '/system/app/'
-  ;;
- 4.4*|4.4.*)
-  unzip -qo "\$ZIP" '$appName/$appName.apk' -d '/system/$appDir/'
-  ;;
- 5*|5.*|5.*.*|6*|6.*|6.*.*)
+ 7*|7.*|7.*.*)
   unzip -qo "\$ZIP" '$appName/*' -d '/system/$appDir'
   ;;
 esac
@@ -258,10 +243,7 @@ function sectionWriter_libInstaller {
 ui_print "~ Installing $displayedName libraries..."
 
 case "\$androidVersion" in
- 4.1*|4.1.*|4.2*|4.2.*|4.3*|4.3.*|4.4*|4.4.*)
-  apkFile='/system/app/$appName/$appName.apk'
-  ;;
- 5*|5.*|5.*.*|6*|6.*|6.*.*)
+ 7*|7.*|7.*.*)
   apkFile='/system/$appDir/$appName/$appName.apk'
   ;;
 esac
@@ -286,31 +268,13 @@ EOF
 
 #This function writes the instructions to change ownership, permissions and eventual SELinux context, to update-binary
 #As for now, the script determines if SELinux is present by looking for the setenforce binary
-#I'll probably base the check on the presence of "/sys/fs/selinux", but that has to be done in a next version 
+#I'll probably base the check on the presence of "/sys/fs/selinux", but that has to be done in a next version
 #///Beginning of function "sectionWriter_validateApp"///
 function sectionWriter_validateApp {
  echo "[INFO] Writing APK ownership, permission and context change instructions to update-binary..."
  cat << EOF >> "$ZIPDIR/META-INF/com/google/android/update-binary"
 case "\$androidVersion" in
- 4.1*|4.2*|4.3*)
-  ui_print "~ Setting ownership and permissions..."
-  chown 0.0 "/system/app/$appName.apk"
-  chmod 644 "/system/app/$appName.apk"
-  if [ -e "/system/bin/setenforce" ]; then
-   ui_print "~ Setting SELinux appropriate context..."
-   chcon u:object_r:system_file:s0 "/system/app/$appName.apk"
-  fi
-  ;;
- 4.4*)
-  ui_print "~ Setting ownership and permissions..."
-  chown 0.0 "/system/$appDir/$appName.apk"
-  chmod 644 "/system/$appDir/$appName.apk"
-  if [ -e "/system/bin/setenforce" ]; then
-   ui_print "~ Setting SELinux appropriate context..."
-   chcon u:object_r:system_file:s0 "/system/$appDir/$appName.apk"
-  fi
-  ;;
- 5*|6*)
+ 7*)
   ui_print "~ Setting ownership and permissions..."
   chown 0.0 "/system/$appDir/$appName"
   chmod 755 "/system/$appDir/$appName"
